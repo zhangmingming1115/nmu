@@ -31,7 +31,7 @@ public class SecurityProperties {
      * mock 模式的开关
      */
     @NotNull(message = "mock 模式的开关不能为空")
-    private Boolean mockEnable = false;
+    private Boolean mockEnable = true;
     /**
      * mock 模式的密钥
      * 一定要配置密钥，保证安全性

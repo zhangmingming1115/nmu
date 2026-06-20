@@ -2,8 +2,6 @@ package com.store.ccsc.module.system.convert.auth;
 
 import cn.hutool.core.collection.CollUtil;
 import com.store.ccsc.framework.common.util.object.BeanUtils;
-import com.store.ccsc.module.system.api.sms.dto.code.SmsCodeSendReqDTO;
-import com.store.ccsc.module.system.api.sms.dto.code.SmsCodeUseReqDTO;
 import com.store.ccsc.module.system.api.social.dto.SocialUserBindReqDTO;
 import com.store.ccsc.module.system.controller.admin.auth.vo.*;
 import com.store.ccsc.module.system.dal.dataobject.oauth2.OAuth2AccessTokenDO;
@@ -81,8 +79,8 @@ public interface AuthConvert {
 
     SocialUserBindReqDTO convert(Long userId, Integer userType, AuthSocialLoginReqVO reqVO);
 
-    SmsCodeSendReqDTO convert(AuthSmsSendReqVO reqVO);
+//    SmsCodeSendReqDTO convert(AuthSmsSendReqVO reqVO);
 
-    SmsCodeUseReqDTO convert(AuthSmsLoginReqVO reqVO, Integer scene, String usedIp);
+//    SmsCodeUseReqDTO convert(AuthSmsLoginReqVO reqVO, Integer scene, String usedIp);
 
 }
