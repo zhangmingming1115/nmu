@@ -1,7 +1,6 @@
 server:
   port: 48080
 
-
 spring:
   # 数据源配置项
   autoconfigure:
@@ -9,18 +8,6 @@ spring:
       - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure # 排除 Druid 的自动配置，使用 dynamic-datasource-spring-boot-starter 配置多数据源
   datasource:
     dynamic: # 多数据源配置
-      druid: # Druid 【连接池】相关的全局配置
-        initial-size: 1 # 初始连接数
-        min-idle: 1 # 最小连接池数量
-        max-active: 20 # 最大连接池数量
-        max-wait: 600000 # 配置获取连接等待超时的时间，单位：毫秒
-        time-between-eviction-runs-millis: 60000 # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位：毫秒
-        min-evictable-idle-time-millis: 300000 # 配置一个连接在池中最小生存的时间，单位：毫秒
-        max-evictable-idle-time-millis: 900000 # 配置一个连接在池中最大生存的时间，单位：毫秒
-        validation-query: SELECT 1 FROM DUAL # 配置检测连接是否有效
-        test-while-idle: true
-        test-on-borrow: false
-        test-on-return: false
       primary: master
       datasource:
         master:
@@ -42,6 +29,8 @@ spring:
     database: 0 # 数据库索引
     password: redis123 # 密码，建议生产环境开启
 
+
+
 # 日志文件配置
 logging:
   file:
@@ -62,10 +51,12 @@ logging:
 
 debug: false
 
---- #################### 芋道相关配置 ####################
-
 # 芋道配置项，设置当前项目所有自定义的配置
 ccsc:
+  captcha:
+    enable: false # 本地环境，暂时关闭图片验证码，方便登录等接口的测试；
+  security:
+    mock-enable: true
   xss:
     enable: false
     exclude-urls: # 如下两个 url，仅仅是为了演示，去掉配置也没关系
@@ -75,5 +66,6 @@ ccsc:
     enable: false
   error-code: # 错误码相关配置项
     enable: false
+
 
 

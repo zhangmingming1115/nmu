@@ -7,6 +7,9 @@ import com.store.ccsc.framework.common.util.monitor.TracerUtils;
 import com.store.ccsc.framework.common.util.servlet.ServletUtils;
 import com.store.ccsc.framework.common.util.validation.ValidationUtils;
 import com.store.ccsc.module.system.api.logger.dto.LoginLogCreateReqDTO;
+import com.store.ccsc.module.system.api.sms.SmsCodeApi;
+import com.store.ccsc.module.system.api.social.dto.SocialUserBindReqDTO;
+import com.store.ccsc.module.system.api.social.dto.SocialUserRespDTO;
 import com.store.ccsc.module.system.controller.admin.auth.vo.*;
 import com.store.ccsc.module.system.convert.auth.AuthConvert;
 import com.store.ccsc.module.system.dal.dataobject.oauth2.OAuth2AccessTokenDO;
@@ -14,6 +17,7 @@ import com.store.ccsc.module.system.dal.dataobject.user.AdminUserDO;
 import com.store.ccsc.module.system.enums.logger.LoginLogTypeEnum;
 import com.store.ccsc.module.system.enums.logger.LoginResultEnum;
 import com.store.ccsc.module.system.enums.oauth2.OAuth2ClientConstants;
+import com.store.ccsc.module.system.enums.sms.SmsSceneEnum;
 import com.store.ccsc.module.system.service.logger.LoginLogService;
 import com.store.ccsc.module.system.service.member.MemberService;
 import com.store.ccsc.module.system.service.oauth2.OAuth2TokenService;
@@ -51,16 +55,18 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     private OAuth2TokenService oauth2TokenService;
     @Resource
     private MemberService memberService;
-//    @Resource
-//    private Validator validator;
-//    @Resource
-//    private CaptchaService captchaService;
+    @Resource
+    private Validator validator;
+    @Resource
+    private CaptchaService captchaService;
+    @Resource
+    private SmsCodeApi smsCodeApi;
 
     /**
      * 验证码的开关，默认为 true
      */
-//    @Value("${ccsc.captcha.enable:true}")
-//    private Boolean captchaEnable;
+    @Value("${ccsc.captcha.enable:true}")
+    private Boolean captchaEnable;
 
     @Override
     public AdminUserDO authenticate(String username, String password) {
@@ -86,7 +92,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     @Override
     public AuthLoginRespVO login(AuthLoginReqVO reqVO) {
         // 校验验证码
-//        validateCaptcha(reqVO);
+        validateCaptcha(reqVO);
 
         // 使用账号密码，进行登录
         AdminUserDO user = authenticate(reqVO.getUsername(), reqVO.getPassword());
@@ -95,7 +101,30 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         return createTokenAfterLoginSuccess(user.getId(), reqVO.getUsername(), LoginLogTypeEnum.LOGIN_USERNAME);
     }
 
+    @Override
+    public void sendSmsCode(AuthSmsSendReqVO reqVO) {
+        // 登录场景，验证是否存在
+        if (userService.getUserByMobile(reqVO.getMobile()) == null) {
+            throw exception(AUTH_MOBILE_NOT_EXISTS);
+        }
+        // 发送验证码
+        smsCodeApi.sendSmsCode(AuthConvert.INSTANCE.convert(reqVO).setCreateIp(getClientIP()));
+    }
 
+    @Override
+    public AuthLoginRespVO smsLogin(AuthSmsLoginReqVO reqVO) {
+        // 校验验证码
+        smsCodeApi.useSmsCode(AuthConvert.INSTANCE.convert(reqVO, SmsSceneEnum.ADMIN_MEMBER_LOGIN.getScene(), getClientIP()));
+
+        // 获得用户信息
+        AdminUserDO user = userService.getUserByMobile(reqVO.getMobile());
+        if (user == null) {
+            throw exception(USER_NOT_EXISTS);
+        }
+
+        // 创建 Token 令牌，记录登录日志
+        return createTokenAfterLoginSuccess(user.getId(), reqVO.getMobile(), LoginLogTypeEnum.LOGIN_MOBILE);
+    }
 
     private void createLoginLog(Long userId, String username,
                                 LoginLogTypeEnum logTypeEnum, LoginResultEnum loginResult) {
@@ -117,7 +146,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     }
 
 
-/*    @VisibleForTesting
+    @VisibleForTesting
     void validateCaptcha(AuthLoginReqVO reqVO) {
         // 如果验证码关闭，则不进行校验
         if (!captchaEnable) {
@@ -134,7 +163,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
             createLoginLog(null, reqVO.getUsername(), LoginLogTypeEnum.LOGIN_USERNAME, LoginResultEnum.CAPTCHA_CODE_ERROR);
             throw exception(AUTH_LOGIN_CAPTCHA_CODE_ERROR, response.getRepMsg());
         }
-    }*/
+    }
 
     private AuthLoginRespVO createTokenAfterLoginSuccess(Long userId, String username, LoginLogTypeEnum logType) {
         // 插入登陆日志

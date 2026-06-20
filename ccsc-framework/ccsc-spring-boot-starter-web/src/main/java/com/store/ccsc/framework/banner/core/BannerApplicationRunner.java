@@ -27,8 +27,5 @@ public class BannerApplicationRunner implements ApplicationRunner {
         });
     }
 
-    private static boolean isNotPresent(String className) {
-        return !ClassUtils.isPresent(className, ClassUtils.getDefaultClassLoader());
-    }
 
 }

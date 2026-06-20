@@ -114,6 +114,24 @@ public class AuthController {
         return success(AuthConvert.INSTANCE.convert(user, roles, menuList));
     }
 
+    // ========== 短信登录相关 ==========
+
+    @PostMapping("/sms-login")
+    @PermitAll
+    @Operation(summary = "使用短信验证码登录")
+    @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
+    public CommonResult<AuthLoginRespVO> smsLogin(@RequestBody @Valid AuthSmsLoginReqVO reqVO) {
+        return success(authService.smsLogin(reqVO));
+    }
+
+    @PostMapping("/send-sms-code")
+    @PermitAll
+    @Operation(summary = "发送手机验证码")
+    @OperateLog(enable = false) // 避免 Post 请求被记录操作日志
+    public CommonResult<Boolean> sendLoginSmsCode(@RequestBody @Valid AuthSmsSendReqVO reqVO) {
+        authService.sendSmsCode(reqVO);
+        return success(true);
+    }
 
 
 }
