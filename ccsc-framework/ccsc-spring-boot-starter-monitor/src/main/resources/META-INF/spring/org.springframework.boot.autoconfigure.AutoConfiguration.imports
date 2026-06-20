@@ -1,0 +1,2 @@
+com.store.ccsc.framework.tracer.config.CcscTracerAutoConfiguration
+com.store.ccsc.framework.tracer.config.CcscMetricsAutoConfiguration

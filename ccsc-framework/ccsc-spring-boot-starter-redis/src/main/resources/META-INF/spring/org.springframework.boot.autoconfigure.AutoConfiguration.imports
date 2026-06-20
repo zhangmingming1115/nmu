@@ -1,0 +1,2 @@
+com.store.ccsc.framework.redis.config.CcscRedisAutoConfiguration
+com.store.ccsc.framework.redis.config.CcscCacheAutoConfiguration

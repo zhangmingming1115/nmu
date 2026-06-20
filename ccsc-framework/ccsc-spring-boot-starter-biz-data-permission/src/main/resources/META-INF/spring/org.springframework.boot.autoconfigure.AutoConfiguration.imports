@@ -1,0 +1,2 @@
+com.store.ccsc.framework.datapermission.config.CcscDataPermissionAutoConfiguration
+com.store.ccsc.framework.datapermission.config.CcscDeptDataPermissionAutoConfiguration

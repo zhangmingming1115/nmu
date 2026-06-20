@@ -1,0 +1,2 @@
+com.store.ccsc.framework.datasource.config.CcscDataSourceAutoConfiguration
+com.store.ccsc.framework.mybatis.config.CcscMybatisAutoConfiguration

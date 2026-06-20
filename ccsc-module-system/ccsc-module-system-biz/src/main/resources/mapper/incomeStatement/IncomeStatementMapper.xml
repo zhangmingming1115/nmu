@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.store.ccsc.module.system.dal.mysql.incomeStatement.IncomeStatementMapper">
+
+
+
+    <select id="getIncomeStatementData"
+            resultType="com.store.ccsc.module.system.dal.dataobject.incomeStatement.IncomeStatementDO"
+            parameterType="java.lang.Long">
+        select s.*,m.engineering_name from income_statement s left join engineering_investment_management m on s.engineering_no=m.engineering_no  where s.tfs_project_code = (select tfs_project_code from tongfu_project where id=#{tongFuProjectId})
+    </select>
+
+
+
+</mapper>

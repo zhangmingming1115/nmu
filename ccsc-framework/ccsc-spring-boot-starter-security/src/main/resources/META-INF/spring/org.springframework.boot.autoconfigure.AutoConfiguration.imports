@@ -1,0 +1,3 @@
+com.store.ccsc.framework.security.config.CcscSecurityAutoConfiguration
+com.store.ccsc.framework.security.config.CcscWebSecurityConfigurerAdapter
+com.store.ccsc.framework.operatelog.config.CcscOperateLogV2Configuration

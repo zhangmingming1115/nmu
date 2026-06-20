@@ -1,0 +1,7 @@
+com.store.ccsc.framework.apilog.config.CcscApiLogAutoConfiguration
+com.store.ccsc.framework.jackson.config.CcscJacksonAutoConfiguration
+com.store.ccsc.framework.swagger.config.CcscSwaggerAutoConfiguration
+com.store.ccsc.framework.web.config.CcscWebAutoConfiguration
+com.store.ccsc.framework.xss.config.CcscXssAutoConfiguration
+com.store.ccsc.framework.banner.config.CcscBannerAutoConfiguration
+com.store.ccsc.framework.errorcode.config.CcscErrorCodeAutoConfiguration
